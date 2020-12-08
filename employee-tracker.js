@@ -19,3 +19,17 @@ connection.connect(function(err) {
     if (err) throw err;
     runSearch();
   });
+
+  function runSearch() {
+    inquirer
+      .prompt({
+        name: "action",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
+          "Add departments, roles, employees",
+          "View departments, roles, employees",
+          "Update employee roles",
+          "Exit"
+        ]
+      })
