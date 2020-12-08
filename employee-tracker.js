@@ -33,3 +33,23 @@ connection.connect(function(err) {
           "Exit"
         ]
       })
+      .then(function(answer) {
+        switch (answer.action) {
+        case "Add departments, roles, employees":
+          artistSearch();
+          break;
+  
+        case "View departments, roles, employees":
+          multiSearch();
+          break;
+  
+        case "Update employee roles":
+          rangeSearch();
+          break;
+
+        case "Exit":
+          connection.end();
+          break;
+        }
+      });
+  }
