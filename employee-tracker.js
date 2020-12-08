@@ -14,3 +14,8 @@ var connection = mysql.createConnection({
   password: "",
   database: "top_songsDB"
 });
+
+connection.connect(function(err) {
+    if (err) throw err;
+    runSearch();
+  });
