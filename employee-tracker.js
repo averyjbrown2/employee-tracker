@@ -39,15 +39,15 @@ connection.connect(function(err) {
       .then(function(answer) {
         switch (answer.action) {
         case "Add department": //set up cases like this
-          addDepartment();
+          addDepartments();
           break;
 
         case "Add role": //set up cases like this
-            addRole();
+            addRoles();
             break;
 
         case "Add employee": //set up cases like this
-            addEmployee();
+            addEmployees();
             break;
   
         case "View departments":
@@ -69,7 +69,7 @@ connection.connect(function(err) {
         }
       });
   }
-  function addDepartment() {
+  function addDepartments() {
     inquirer
       .prompt({
         name: "department",
@@ -116,7 +116,7 @@ connection.connect(function(err) {
           runSearch();
         });
       });
-  function viewDepartment() { //add function to switch statement
+  function viewDepartments() { //add function to switch statement
         var query = "SELECT * FROM department";
         connection.query(query, function(err, res) {
           if (err) throw err;
@@ -129,19 +129,22 @@ connection.connect(function(err) {
       return this.connection.query("SELECT * FROM employee") 
   }
 
-  function viewDepartment() { //add function to switch statement
-    var query = "SELECT * FROM department";
+  function viewRoles() { //add function to switch statement
+    var query = "SELECT * FROM role";
     connection.query(query, function(err, res) {
       if (err) throw err;
       console.table(res);
       runSearch();
     });
 }
-
-function findAllEmployees(){
-  return this.connection.query("SELECT * FROM employee") 
+function viewEmployees() { //add function to switch statement
+    var query = "SELECT * FROM employee";
+    connection.query(query, function(err, res) {
+      if (err) throw err;
+      console.table(res);
+      runSearch();
+    });
 }
-
 function updateRole() { //add function to switch statement   
     const employees = await db.findAllEmployees();  
     inquirer
