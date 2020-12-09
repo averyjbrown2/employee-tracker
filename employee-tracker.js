@@ -30,11 +30,10 @@ connection.connect(function(err) {
           "Add department", //break down into individ questions in this format
           "Add role",
           "Add employee",
-          "View department",
-          "View role",
-          "View employee",
+          "View departments",
+          "View roles",
+          "View employees",
           "Update employee roles",
-          "Exit"
         ]
       })
       .then(function(answer) {
@@ -44,21 +43,26 @@ connection.connect(function(err) {
           break;
 
         case "Add role": //set up cases like this
-        addRole();
-        break;
+            addRole();
+            break;
 
         case "Add employee": //set up cases like this
-        addEmployee();
-        break;
+            addEmployee();
+            break;
   
-        case "View departments, roles, employees":
-          multiSearch();
+        case "View departments":
+            viewDepartments();
           break;
   
-        case "Update employee roles":
-          updateSearch();
-          break;
-
+        case "View role":
+            viewRoles();
+            break;
+        case "View employees":
+            viewEmployees();
+            break;
+        case "Update empoyee roles":
+            updateEmployees();
+            break;
         default:
             connection.end();
           break;
