@@ -74,13 +74,29 @@ connection.connect(function(err) {
       .prompt({
         name: "department",
         type: "input",
-        message: "What department would you like to add?" //set functions up like this. needd 7 functions
+        message: "What department would you like to add?" //set functions up like this. need 7 functions
       })
       .then(function(answer) {
         var query = "INSERT INTO department (name) values ?";
         connection.query(query, { department: answer.department }, function(err, res) {
           if (err) throw err;
           console.log(res.affectedRows + "departments added")
+          runSearch();
+        });
+      });
+  }
+  function addRoles() {
+    inquirer
+      .prompt({
+        name: "roles",
+        type: "input",
+        message: "What role would you like to add?" //set functions up like this. need 7 functions
+      })
+      .then(function(answer) {
+        var query = "INSERT INTO role (department_id) values ?";
+        connection.query(query, { role: answer.role }, function(err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + "role added")
           runSearch();
         });
       });
