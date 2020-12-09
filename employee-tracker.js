@@ -128,6 +128,20 @@ connection.connect(function(err) {
   function findAllEmployees(){
       return this.connection.query("SELECT * FROM employee") 
   }
+
+  function viewDepartment() { //add function to switch statement
+    var query = "SELECT * FROM department";
+    connection.query(query, function(err, res) {
+      if (err) throw err;
+      console.table(res);
+      runSearch();
+    });
+}
+
+function findAllEmployees(){
+  return this.connection.query("SELECT * FROM employee") 
+}
+
 function updateRole() { //add function to switch statement   
     const employees = await db.findAllEmployees();  
     inquirer
