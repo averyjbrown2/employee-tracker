@@ -101,6 +101,21 @@ connection.connect(function(err) {
         });
       });
   }
+  function addEmployees() {
+    inquirer
+      .prompt({
+        name: "addEmployees",
+        type: "input",
+        message: "What employee would you like to add?" //set functions up like this. need 7 functions
+      })
+      .then(function(answer) {
+        var query = "INSERT INTO employee (first_name, last_name) values ?";
+        connection.query(query, { employee: answer.employee }, function(err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + "employees added")
+          runSearch();
+        });
+      });
   function viewDepartment() { //add function to switch statement
         var query = "SELECT * FROM department";
         connection.query(query, function(err, res) {
