@@ -3,7 +3,7 @@ CREATE DATABASE employee_trackerDB;
 USE employee_trackerDB;
 
 CREATE TABLE department(
-    id INT PRIMARY KEY NOT NULL,
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name VARCHAR(30) NOT NULL
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE employee(
     role_id INT NOT NULL,
     manager_id INT
 );
-
+<---->
 INSERT INTO authors (firstName, lastName) values ('Jane', 'Austen');
 INSERT INTO authors (firstName, lastName) values ('Mark', 'Twain');
 INSERT INTO authors (firstName, lastName) values ('Lewis', 'Carroll');
