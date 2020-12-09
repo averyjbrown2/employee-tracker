@@ -61,7 +61,7 @@ connection.connect(function(err) {
             viewEmployees();
             break;
         case "Update empoyee roles":
-            updateEmployees();
+            updateRole();
             break;
         default:
             connection.end();
@@ -104,7 +104,7 @@ connection.connect(function(err) {
   function addEmployees() {
     inquirer
       .prompt({
-        name: "addEmployees",
+        name: "employees",
         type: "input",
         message: "What employee would you like to add?" //set functions up like this. need 7 functions
       })
@@ -116,6 +116,7 @@ connection.connect(function(err) {
           runSearch();
         });
       });
+  }
   function viewDepartments() { //add function to switch statement
         var query = "SELECT * FROM department";
         connection.query(query, function(err, res) {
