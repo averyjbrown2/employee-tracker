@@ -146,25 +146,25 @@ function viewEmployees() { //add function to switch statement
       runSearch();
     });
 }
-function updateRole() { //add function to switch statement   
-    const employees = await db.findAllEmployees();  
-    inquirer
-      .prompt({
-        name: "employee-id",
-        type: "input",
-        message: "Which employee would you like to update?" //set functions up like this. needd 7 functions
-      },
-      {name: "employee-role",
-      type: "list",
-      message: "What role would you like to update to?", //set functions up like this. needd 7 functions
-      choices: (employees)
-    })
-      .then(function(answer) { // needs work
-        var query = "UPDATE employee SET ? WHERE ?";
-        connection.query(query, { department: answer.department }, function(err, res) {
-          if (err) throw err;
-          console.log(res.affectedRows + "departments added")
-          runSearch();
-        });
-      });
-}
+// function updateRole() { //add function to switch statement   
+//     const employees = await db.findAllEmployees();  
+//     inquirer
+//       .prompt({
+//         name: "employee-id",
+//         type: "input",
+//         message: "Which employee would you like to update?" //set functions up like this. needd 7 functions
+//       },
+//       {name: "employee-role",
+//       type: "list",
+//       message: "What role would you like to update to?", //set functions up like this. needd 7 functions
+//       choices: (employees)
+//     })
+//       .then(function(answer) { // needs work
+//         var query = "UPDATE employee SET ? WHERE ?";
+//         connection.query(query, { department: answer.department }, function(err, res) {
+//           if (err) throw err;
+//           console.log(res.affectedRows + "departments added")
+//           runSearch();
+//         });
+//       });
+// }
