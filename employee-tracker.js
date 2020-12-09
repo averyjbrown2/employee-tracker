@@ -57,12 +57,15 @@ connection.connect(function(err) {
         case "View role":
             viewRoles();
             break;
+
         case "View employees":
             viewEmployees();
             break;
+            
         case "Update empoyee roles":
             updateRole();
             break;
+
         default:
             connection.end();
           break;
@@ -77,7 +80,7 @@ connection.connect(function(err) {
         message: "What department would you like to add?" //set functions up like this. need 7 functions
       })
       .then(function(answer) {
-        var query = "INSERT INTO department (name) values ?";
+        var query = "INSERT INTO department (name) VALUES ?";
         connection.query(query, { department: answer.department }, function(err, res) {
           if (err) throw err;
           console.log(res.affectedRows + "departments added")
