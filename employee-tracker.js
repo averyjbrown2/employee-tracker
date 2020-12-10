@@ -108,8 +108,8 @@ connection.connect(function(err) {
         message: "What role would you like to add?" //set functions up like this. need 7 functions
       })
       .then(function(answer) {
-        var query = "INSERT INTO role (department_id) values ?";
-        connection.query(query, { role: answer.role }, function(err, res) {
+        var query = "INSERT INTO role SET ?";
+        connection.query(query, answer, function(err, res) {
           if (err) throw err;
           console.log(res.affectedRows + "role added")
           runSearch();
@@ -124,8 +124,8 @@ connection.connect(function(err) {
         message: "What employee would you like to add?" //set functions up like this. need 7 functions
       })
       .then(function(answer) {
-        var query = "INSERT INTO employee (first_name, last_name) values ?";
-        connection.query(query, { employee: answer.employee }, function(err, res) {
+        var query = "INSERT INTO employee SET ?";
+        connection.query(query, answer, function(err, res) {
           if (err) throw err;
           console.log(res.affectedRows + "employees added")
           runSearch();
