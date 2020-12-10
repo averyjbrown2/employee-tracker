@@ -34,6 +34,7 @@ connection.connect(function(err) {
           "View roles",
           "View employees",
           "Update employee roles",
+          "Exit application"
         ]
       })
       .then(function(answer) {
@@ -66,6 +67,10 @@ connection.connect(function(err) {
             updateRole();
             break;
 
+        case "Exit application":
+            exitApp();
+            break;
+        
         default:
             connection.end();
           break;
@@ -83,35 +88,39 @@ connection.connect(function(err) {
         var query = "INSERT INTO department SET ?";
         connection.query(query, answer, function(err, res) {
           if (err) throw err;
-          console.log(res.affectedRows + "departments added")
+          console.log(res.affectedRows + " departments added")
           runSearch();
         });
       });
   }
-//====================================================
-//EXCHANGE previous (addDepartments) function for this format?
-
-//     con.connect(function(err) {
-//     if (err) throw err;
-//     var sql = "INSERT INTO department (name) VALUES ?;
-//     con.query(sql, function (err, result) {
-//       if (err) throw err;
-//       console.log("res.affectedRows + "departments added");
-//     });
-//   });
-//============END===========================================
-  function addRoles() {
+function addRoles() {
     inquirer
       .prompt({
-        name: "roles",
+        name: "title",
         type: "input",
         message: "What role would you like to add?" //set functions up like this. need 7 functions
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What salary would you like to add to this role?"
+      }, 
+      {
+        name: "department_id",
+        type: "input",
+        message: "What department ID would you like to add to this role?"
       })
       .then(function(answer) {
-        var query = "INSERT INTO role SET ?";
-        connection.query(query, answer, function(err, res) {
+        var query = "INSERT INTO role (title, salary, department_id) SET ?";
+        connection.query(query, answer,
+          // {
+          //   title: answer.title,
+          //   salary: answer.salary || "N/A",
+          //   department_id: answer.department_id || "N/A"
+          // },          
+          function(err, res) {
           if (err) throw err;
-          console.log(res.affectedRows + "role added")
+          console.log(res.affectedRows + " role added");
           runSearch();
         });
       });
@@ -119,7 +128,7 @@ connection.connect(function(err) {
   function addEmployees() {
     inquirer
       .prompt({
-        name: "employees",
+        name: "employee_name",
         type: "input",
         message: "What employee would you like to add?" //set functions up like this. need 7 functions
       })
@@ -127,7 +136,7 @@ connection.connect(function(err) {
         var query = "INSERT INTO employee SET ?";
         connection.query(query, answer, function(err, res) {
           if (err) throw err;
-          console.log(res.affectedRows + "employees added")
+          console.log(res.affectedRows + " employees added")
           runSearch();
         });
       });
@@ -146,12 +155,12 @@ connection.connect(function(err) {
   }
 
   function viewRoles() { //add function to switch statement
-    var query = "SELECT * FROM role";
-    connection.query(query, function(err, res) {
-      if (err) throw err;
-      console.table(res);
-      runSearch();
-    });
+      var query = "SELECT * FROM role";
+      connection.query(query, function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        runSearch();
+      });
 }
 function viewEmployees() { //add function to switch statement
     var query = "SELECT * FROM employee";
@@ -183,3 +192,7 @@ function viewEmployees() { //add function to switch statement
 //         });
 //       });
 // }
+function exitApp(){
+  console.log("Exiting application.");
+  connection.end()
+};
