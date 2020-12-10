@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "",
-  database: "top_songsDB"
+  database: "employee_trackerDB"
 });
 
 connection.connect(function(err) {
@@ -75,13 +75,13 @@ connection.connect(function(err) {
   function addDepartments() {
     inquirer
       .prompt({
-        name: "department",
+        name: "name",
         type: "input",
         message: "What department would you like to add?" //set functions up like this. need 7 functions
       })
       .then(function(answer) {
-        var query = "INSERT INTO department (name) VALUES ?";
-        connection.query(query, { department: answer.department }, function(err, res) {
+        var query = "INSERT INTO department SET ?";
+        connection.query(query, answer, function(err, res) {
           if (err) throw err;
           console.log(res.affectedRows + "departments added")
           runSearch();
