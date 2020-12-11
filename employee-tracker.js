@@ -124,24 +124,57 @@ function addRoles() {
         });
     });
 }
-
-///////////////////////////////NOT CORRECT YET
 function addEmployees() {
   inquirer
-    .prompt({
-      name: "first_name",
-      type: "input",
-      message: "What is the first name of the employee would you like to add?" //set functions up like this. need 7 functions
-    })
+    .prompt([
+      {
+        name: "first_name",
+        type: "input",
+        message: "What is the first name of the employee you would you like to add?" //set functions up like this. need 7 functions
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "What is the last name of the employee you would you like to add?" //set functions up like this. need 7 functions
+      },
+      {
+        name: "role_id",
+        type: "input",
+        message: "What is the role ID of the employee you would you like to add?" //set functions up like this. need 7 functions
+      },
+      {
+        name: "manager_id",
+        type: "input",
+        message: "What is the manager ID of the employee you would you like to add?" //set functions up like this. need 7 functions
+      },
+    ])
     .then(function (answer) {
-      var query = "INSERT INTO employee SET ?";
-      connection.query(query, answer, function (err, res) {
-        if (err) throw err;
-        console.log(res.affectedRows + " employees added")
-        runSearch();
-      });
+      connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.first_name, answer.last_name, answer.role_id, answer.manager_id],
+        function (err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + " role added");
+          runSearch();
+        });
     });
 }
+
+///////////////////////////////NOT CORRECT YET
+// function addEmployees() {
+//   inquirer
+//     .prompt({
+//       name: "first_name",
+//       type: "input",
+//       message: "What is the first name of the employee would you like to add?" //set functions up like this. need 7 functions
+//     })
+//     .then(function (answer) {
+//       var query = "INSERT INTO employee SET ?";
+//       connection.query(query, answer, function (err, res) {
+//         if (err) throw err;
+//         console.log(res.affectedRows + " employees added")
+//         runSearch();
+//       });
+//     });
+// }
 function viewDepartments() { //add function to switch statement
   var query = "SELECT * FROM department";
   connection.query(query, function (err, res) {
