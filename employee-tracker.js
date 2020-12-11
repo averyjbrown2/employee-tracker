@@ -1,3 +1,4 @@
+//requirements to allow app to run
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var util = require('util');
@@ -23,6 +24,7 @@ connection.connect(function (err) {
   runSearch();
 });
 
+//initial question choices prompted to user
 function runSearch() {
   inquirer
     .prompt({
@@ -30,7 +32,7 @@ function runSearch() {
       type: "list",
       message: "What would you like to do?",
       choices: [
-        "Add department", //break down into individ questions in this format
+        "Add department",
         "Add role",
         "Add employee",
         "View departments",
@@ -40,52 +42,62 @@ function runSearch() {
         "Exit application"
       ]
     })
+    //then statement that sets up switch cases for when user chooses item in prompt
     .then(function (answer) {
       switch (answer.action) {
-        case "Add department": //set up cases like this
+        //case option for when user chooses "Add department", app will run addDepartments function
+        case "Add department": 
           addDepartments();
           break;
 
-        case "Add role": //set up cases like this
+        //case option for when user chooses "Add role", app will run addRoles function
+        case "Add role": 
           addRoles();
           break;
 
-        case "Add employee": //set up cases like this
+        //case option for when user chooses "Add employee", app will run addEmployees function
+        case "Add employee":
           addEmployees();
           break;
 
+        //case option for when user chooses "View departments", app will run viewDepartments function
         case "View departments":
           viewDepartments();
           break;
 
+        //case option for when user chooses "View role", app will run viewRoles function
         case "View role":
           viewRoles();
           break;
 
+        //case option for when user chooses "View Employees", app will run viewEmployees function
         case "View employees":
           viewEmployees();
           break;
 
+        //case option for when user chooses "Update emplyee roles", app will run updateRole function
         case "Update empoyee roles":
           updateRole();
           break;
-
+        //case option for when user chooses "Exit application", app will run exitApp function
         case "Exit application":
           exitApp();
           break;
-
+        //For every other instance, connection will end
         default:
           connection.end();
           break;
       }
     });
 }
+
+//Function called by switch case that allows user to enter dept info
 function addDepartments() {
   inquirer
     .prompt({
       name: "name",
       type: "input",
-      message: "What department would you like to add?" //set functions up like this. need 7 functions
+      message: "What department would you like to add?"
     })
     .then(function (answer) {
       var query = "INSERT INTO department SET ?";
@@ -96,13 +108,14 @@ function addDepartments() {
       });
     });
 }
+//Function called by switch case that allows user to enter role info
 function addRoles() {
   inquirer
     .prompt([
       {
         name: "title",
         type: "input",
-        message: "What role would you like to add?" //set functions up like this. need 7 functions
+        message: "What role would you like to add?"
       },
       {
         name: "salary",
@@ -157,24 +170,6 @@ function addEmployees() {
         });
     });
 }
-
-///////////////////////////////NOT CORRECT YET
-// function addEmployees() {
-//   inquirer
-//     .prompt({
-//       name: "first_name",
-//       type: "input",
-//       message: "What is the first name of the employee would you like to add?" //set functions up like this. need 7 functions
-//     })
-//     .then(function (answer) {
-//       var query = "INSERT INTO employee SET ?";
-//       connection.query(query, answer, function (err, res) {
-//         if (err) throw err;
-//         console.log(res.affectedRows + " employees added")
-//         runSearch();
-//       });
-//     });
-// }
 function viewDepartments() { //add function to switch statement
   var query = "SELECT * FROM department";
   connection.query(query, function (err, res) {
