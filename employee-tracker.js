@@ -24,6 +24,10 @@ connection.connect(function (err) {
   runSearch();
 });
 
+//went over with instructor
+//makes connection available to promisify
+const queryAsync = util.promisify(connection.query).bind(connection)
+
 //initial question choices prompted to user
 function runSearch() {
   inquirer
@@ -46,12 +50,12 @@ function runSearch() {
     .then(function (answer) {
       switch (answer.action) {
         //case option for when user chooses "Add department", app will run addDepartments function
-        case "Add department": 
+        case "Add department":
           addDepartments();
           break;
 
         //case option for when user chooses "Add role", app will run addRoles function
-        case "Add role": 
+        case "Add role":
           addRoles();
           break;
 
@@ -66,7 +70,7 @@ function runSearch() {
           break;
 
         //case option for when user chooses "View role", app will run viewRoles function
-        case "View role":
+        case "View roles":
           viewRoles();
           break;
 
@@ -76,7 +80,7 @@ function runSearch() {
           break;
 
         //case option for when user chooses "Update emplyee roles", app will run updateRole function
-        case "Update empoyee roles":
+        case "Update employee roles":
           updateRole();
           break;
         //case option for when user chooses "Exit application", app will run exitApp function
@@ -162,7 +166,8 @@ function addEmployees() {
       },
     ])
     .then(function (answer) {
-      connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.first_name, answer.last_name, answer.role_id, answer.manager_id],
+      connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
+        [answer.first_name, answer.last_name, answer.role_id, answer.manager_id],
         function (err, res) {
           if (err) throw err;
           console.log(res.affectedRows + " role added");
@@ -170,7 +175,7 @@ function addEmployees() {
         });
     });
 }
-function viewDepartments() { //add function to switch statement
+function viewDepartments() {
   var query = "SELECT * FROM department";
   connection.query(query, function (err, res) {
     if (err) throw err;
@@ -178,13 +183,12 @@ function viewDepartments() { //add function to switch statement
     runSearch();
   });
 }
-
 function findAllEmployees() {
-  return this.connection.query("SELECT * FROM employee")
+  return queryAsync("SELECT * FROM employee")
 }
 
 function viewRoles() { //add function to switch statement
-  var query = "SELECT * FROM role";
+  var query = "SELECT * FROM role;";
   connection.query(query, function (err, res) {
     if (err) throw err;
     console.table(res);
@@ -192,7 +196,7 @@ function viewRoles() { //add function to switch statement
   });
 }
 function viewEmployees() { //add function to switch statement
-  var query = "SELECT * FROM employee";
+  var query = "SELECT * FROM employee;";
   connection.query(query, function (err, res) {
     if (err) throw err;
     console.table(res);
@@ -201,28 +205,41 @@ function viewEmployees() { //add function to switch statement
 }
 
 ////////////////////////////
-// function updateRole() { //add function to switch statement   
-//     const employees = await db.findAllEmployees();  
-//     inquirer
-//       .prompt({
-//         name: "employee-id",
-//         type: "input",
-//         message: "Which employee would you like to update?" //set functions up like this. needd 7 functions
-//       },
-//       {name: "employee-role",
-//       type: "list",
-//       message: "What role would you like to update to?", //set functions up like this. needd 7 functions
-//       choices: (employees)
-//     })
-//       .then(function(answer) { // needs work
-//         var query = "UPDATE employee SET ? WHERE ?";
-//         connection.query(query, { department: answer.department }, function(err, res) {
-//           if (err) throw err;
-//           console.log(res.affectedRows + "departments added")
-//           runSearch();
-//         });
-//       });
-// }
+const updateRole = async () => { //add function to switch statement   
+  const employees = await findAllEmployees();
+  const empList = employees.map(employee => { return { name: `${employee.first_name} ${employee.last_name}`, value: employee.id } })
+  connection.query("SELECT * from role;", (err, res) => {
+    if (err) throw err;
+    const roleList = res.map(({ title, id }) => { return { name: title, value: id } })
+    inquirer
+      .prompt([
+        {
+          name: "id",
+          type: "list",
+          message: "Which employee would you like to update?", //set functions up like this. needd 7 functions
+          choices: empList
+        },
+        {
+          name: "role_id",
+          message: "What role would you like to assign to this employee?", //set functions up like this. needd 7 functions
+          type: "list",
+          choices: roleList
+        },
+
+      ])
+      .then(function (answer) { // needs work
+        var query = "UPDATE employee SET role_id = ? WHERE id = ?";
+        connection.query(query, [answer.role_id, answer.id], function (err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + " role changed")
+          runSearch();
+
+
+
+        });
+      });
+  })
+}
 
 /////////////////////////////////
 function exitApp() {
