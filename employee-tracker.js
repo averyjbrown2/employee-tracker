@@ -3,6 +3,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var util = require('util');
 
+//creates connection
 var connection = mysql.createConnection({
   host: "localhost",
 
@@ -16,8 +17,6 @@ var connection = mysql.createConnection({
   password: "",
   database: "employee_trackerDB"
 });
-
-//connection.query = util.promisify(connection.query);
 
 connection.connect(function (err) {
   if (err) throw err;
@@ -131,7 +130,7 @@ function addRoles() {
         type: "input",
         message: "What department ID would you like to add to this role?"
       }
-    ])
+    ])//selects role table and inserts info provided by user answers to prompts
     .then(function (answer) {
       connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.title, answer.salary, answer.department_id],
         function (err, res) {
@@ -141,6 +140,7 @@ function addRoles() {
         });
     });
 }
+//adddEmployees function which prompts user to enter info about new employee
 function addEmployees() {
   inquirer
     .prompt([
@@ -165,6 +165,7 @@ function addEmployees() {
         message: "What is the manager ID of the employee you would you like to add?" //set functions up like this. need 7 functions
       },
     ])
+    //pushes info from user answers into employee table
     .then(function (answer) {
       connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
         [answer.first_name, answer.last_name, answer.role_id, answer.manager_id],
@@ -175,6 +176,7 @@ function addEmployees() {
         });
     });
 }
+//function that allows user to view department table
 function viewDepartments() {
   var query = "SELECT * FROM department";
   connection.query(query, function (err, res) {
@@ -183,11 +185,13 @@ function viewDepartments() {
     runSearch();
   });
 }
+//gathers info for all employees and makes them available 
 function findAllEmployees() {
   return queryAsync("SELECT * FROM employee")
 }
 
-function viewRoles() { //add function to switch statement
+//viewRoles function allows user to view created roles
+function viewRoles() {
   var query = "SELECT * FROM role;";
   connection.query(query, function (err, res) {
     if (err) throw err;
@@ -195,7 +199,8 @@ function viewRoles() { //add function to switch statement
     runSearch();
   });
 }
-function viewEmployees() { //add function to switch statement
+//viewEmployees allows user to view created employee profiles
+function viewEmployees() {
   var query = "SELECT * FROM employee;";
   connection.query(query, function (err, res) {
     if (err) throw err;
@@ -204,8 +209,8 @@ function viewEmployees() { //add function to switch statement
   });
 }
 
-////////////////////////////
-const updateRole = async () => { //add function to switch statement   
+//allows user to update the role of an existing employee
+const updateRole = async () => {    
   const employees = await findAllEmployees();
   const empList = employees.map(employee => { return { name: `${employee.first_name} ${employee.last_name}`, value: employee.id } })
   connection.query("SELECT * from role;", (err, res) => {
@@ -233,15 +238,11 @@ const updateRole = async () => { //add function to switch statement
           if (err) throw err;
           console.log(res.affectedRows + " role changed")
           runSearch();
-
-
-
         });
       });
   })
 }
 
-/////////////////////////////////
 function exitApp() {
   console.log("Exited application.");
   connection.end()
