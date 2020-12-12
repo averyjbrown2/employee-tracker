@@ -221,18 +221,18 @@ const updateRole = async () => {
         {
           name: "id",
           type: "list",
-          message: "Which employee would you like to update?", //set functions up like this. needd 7 functions
+          message: "Which employee would you like to update?", 
           choices: empList
         },
         {
           name: "role_id",
-          message: "What role would you like to assign to this employee?", //set functions up like this. needd 7 functions
+          message: "What role would you like to assign to this employee?", 
           type: "list",
           choices: roleList
         },
 
       ])
-      .then(function (answer) { // needs work
+      .then(function (answer) {
         var query = "UPDATE employee SET role_id = ? WHERE id = ?";
         connection.query(query, [answer.role_id, answer.id], function (err, res) {
           if (err) throw err;
@@ -243,6 +243,7 @@ const updateRole = async () => {
   })
 }
 
+//exits application
 function exitApp() {
   console.log("Exited application.");
   connection.end()
